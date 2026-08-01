@@ -1,13 +1,17 @@
 import { FaHeart } from "react-icons/fa";
 import "../css/MovieCard.css";
-
+import { useMovieContext } from "../contexts/MovieContext";
 function MovieCard({ movie }) {
-  function FavoriteMovie() {
-    alert("clicked");
+  // for use context in the components
+  const { addToFavorites, removeFromFavorites, isFavorite } = useMovieContext()
+  const favorite = isFavorite(movie.id)
+  
+  function FavoriteMovie(e) {
+    e.preventDefault()
+    if(favorite){
+      removeFromFavorites(movie.id)
+    }else addToFavorites(movie)
   }
-  // check if movie.tone is empty or false take value after or
-  const [toneA, toneB] = movie.tone || ["#2a3142", "#12141c"];
-
   return (
     <div className="movie-card">
       <div className="movie-poster">
@@ -17,16 +21,14 @@ function MovieCard({ movie }) {
             alt={movie.title}
           />
         ) : (
-          <div
-            className="movie-poster-fallback"
-            style={{ "--tone-a": toneA, "--tone-b": toneB }}
-          >
+          <div className="movie-poster-fallback">
             <span>{movie.title}</span>
           </div>
         )}
         <div className="movie-overlay" />
         <button
-          className="favorite-btn"
+        // for add active class if movie is favorite
+          className={`favorite-btn ${favorite && "active" }`  }
           onClick={FavoriteMovie}
           //for enhance accessibility
           aria-label={`Favorite ${movie.title}`}
