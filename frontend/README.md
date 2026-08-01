@@ -1,14 +1,20 @@
 # REEL — Movie App
 
+![Home](Home.png)
+
 A React movie browser powered by [The Movie Database (TMDB)](https://www.themoviedb.org/). Browse popular films, search titles, save favorites, and open detailed movie pages with cast and trailers.
 
 ## Features
+
+![Movie](MovieDetails.png)
 
 - **Popular movies** — home page loads trending/popular titles from TMDB
 - **Search** — find movies by title
 - **Favorites** — save/remove favorites (persisted in `localStorage`)
 - **Movie details** — overview, rating, runtime, genres, cast (horizontal scroll), and YouTube trailer
 - **Cinema UI** — dark theme with gold accents, skeleton loading states
+
+![Favorites](Favorites.png)
 
 ## Tech stack
 
