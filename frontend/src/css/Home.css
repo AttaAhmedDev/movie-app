@@ -96,12 +96,107 @@
   transform: translateY(0);
 }
 
+.home-status {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  padding: 2rem 1rem;
+}
+
+.home-status--error {
+  color: var(--danger);
+  padding-bottom: 0.5rem;
+}
+
 .movies-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 1.75rem 1.25rem;
   width: 100%;
   box-sizing: border-box;
+}
+
+.movie-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.movie-skeleton__poster {
+  aspect-ratio: 2 / 3;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-subtle);
+  background: linear-gradient(
+    110deg,
+    var(--bg-surface) 25%,
+    var(--bg-elevated) 40%,
+    var(--bg-surface) 55%
+  );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.4s ease-in-out infinite;
+}
+
+.movie-skeleton__line {
+  height: 0.7rem;
+  border-radius: 3px;
+  background: linear-gradient(
+    110deg,
+    var(--bg-surface) 25%,
+    var(--bg-elevated) 40%,
+    var(--bg-surface) 55%
+  );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.4s ease-in-out infinite;
+}
+
+.movie-skeleton__line--title {
+  width: 78%;
+  margin-top: 0.15rem;
+}
+
+.movie-skeleton__line--meta {
+  width: 42%;
+  height: 0.55rem;
+  opacity: 0.7;
+  animation-delay: 0.12s;
+}
+
+.movies-grid--loading .movie-skeleton:nth-child(2) .movie-skeleton__poster,
+.movies-grid--loading .movie-skeleton:nth-child(2) .movie-skeleton__line {
+  animation-delay: 0.08s;
+}
+
+.movies-grid--loading .movie-skeleton:nth-child(3) .movie-skeleton__poster,
+.movies-grid--loading .movie-skeleton:nth-child(3) .movie-skeleton__line {
+  animation-delay: 0.16s;
+}
+
+.movies-grid--loading .movie-skeleton:nth-child(4) .movie-skeleton__poster,
+.movies-grid--loading .movie-skeleton:nth-child(4) .movie-skeleton__line {
+  animation-delay: 0.24s;
+}
+
+.movies-grid--loading .movie-skeleton:nth-child(5) .movie-skeleton__poster,
+.movies-grid--loading .movie-skeleton:nth-child(5) .movie-skeleton__line {
+  animation-delay: 0.32s;
+}
+
+@keyframes skeletonShimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .movie-skeleton__poster,
+  .movie-skeleton__line {
+    animation: none;
+    background: var(--bg-elevated);
+  }
 }
 
 @media (min-width: 900px) {

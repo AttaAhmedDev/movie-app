@@ -1,26 +1,47 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import MovieCard from "../components/MovieCard";
+import { getPopularMovies , searchMovies } from "../services/api";
 import "../css/Home.css";
 
 function Home() {
   const [searchQuery, SetSearchQuery] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const movies = [
-    { id: 1, title: "John Wick", releaseDate: "2024", tone: ["#3d2a1f", "#1a1210"] },
-    { id: 2, title: "Terminator", releaseDate: "2025", tone: ["#1f2d3d", "#0e141c"] },
-    { id: 3, title: "Die Hard", releaseDate: "2026", tone: ["#3d1f24", "#140c0e"] },
-    { id: 4, title: "Good Man", releaseDate: "2025", tone: ["#2a3d2f", "#0e1410"] },
-  ];
+  useEffect(()=>{
+    const fetchMovies = async()=>{
+      try{
+        const popularMovies = await getPopularMovies()
+        setMovies(popularMovies)
+      } catch(err){
+        console.log(err)
+        setError("Failed to load movies")
+      } 
+      finally{ setLoading(false) }
+    }
 
-  const handleSearch = (e) => {
+    fetchMovies()
+  },[])
+
+  const handleSearch = async (e) => {
     e.preventDefault();
-    alert(searchQuery);
-    SetSearchQuery("");
-  };
+    // for prevent user entry empty string and not search again if loading
+    if(!searchQuery.trim()) return 
+    if (loading) return 
 
-  const filtered = movies.filter((movie) =>
-    movie.title.toLowerCase().startsWith(searchQuery.toLowerCase())
-  );
+    setLoading(true)
+
+    try{
+      const searchResults = await searchMovies(searchQuery)
+      setMovies(searchResults)
+      setError(null)
+    } catch(err){
+      console.log(err)
+      setError("Failed to search movies")
+    } finally{ setLoading(false) }
+
+  };
 
   return (
     <div className="home">
@@ -42,11 +63,25 @@ function Home() {
         </button>
       </form>
 
-      <div className="movies-grid">
-        {filtered.map((movie) => (
-          <MovieCard movie={movie} key={movie.id} />
-        ))}
-      </div>
+      {error && <p className="home-status home-status--error">{error}</p>}
+
+      {loading ? (
+        <div className="movies-grid movies-grid--loading" aria-busy="true" aria-label="Loading movies">
+          {Array.from({ length: 8 }, (_, i) => (
+            <div className="movie-skeleton" key={i}>
+              <div className="movie-skeleton__poster" />
+              <div className="movie-skeleton__line movie-skeleton__line--title" />
+              <div className="movie-skeleton__line movie-skeleton__line--meta" />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="movies-grid">
+          {movies.map((movie) => (
+            <MovieCard movie={movie} key={movie.id} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
