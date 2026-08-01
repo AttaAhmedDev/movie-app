@@ -1,19 +1,22 @@
+import { Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import "../css/MovieCard.css";
 import { useMovieContext } from "../contexts/MovieContext";
+
 function MovieCard({ movie }) {
-  // for use context in the components
-  const { addToFavorites, removeFromFavorites, isFavorite } = useMovieContext()
-  const favorite = isFavorite(movie.id)
-  
+  const { addToFavorites, removeFromFavorites, isFavorite } = useMovieContext();
+  const favorite = isFavorite(movie.id);
+  const year = movie.release_date?.split("-")[0];
+
   function FavoriteMovie(e) {
-    e.preventDefault()
-    if(favorite){
-      removeFromFavorites(movie.id)
-    }else addToFavorites(movie)
+    e.preventDefault();
+    e.stopPropagation();
+    if (favorite) removeFromFavorites(movie.id);
+    else addToFavorites(movie);
   }
+
   return (
-    <div className="movie-card">
+    <Link to={`/movie/${movie.id}`} className="movie-card">
       <div className="movie-poster">
         {movie.poster_path ? (
           <img
@@ -27,22 +30,19 @@ function MovieCard({ movie }) {
         )}
         <div className="movie-overlay" />
         <button
-        // for add active class if movie is favorite
-          className={`favorite-btn ${favorite && "active" }`  }
+          type="button"
+          className={`favorite-btn ${favorite ? "active" : ""}`}
           onClick={FavoriteMovie}
-          //for enhance accessibility
           aria-label={`Favorite ${movie.title}`}
         >
-          {/* component icon for heart in react-icons*/}
           <FaHeart size={14} />
         </button>
       </div>
       <div className="movie-info">
         <h3>{movie.title}</h3>
-        {/* for get year of movie not all date */}
-        <p>{(movie.release_date).split("-")[0]}</p>
+        {year && <p>{year}</p>}
       </div>
-    </div>
+    </Link>
   );
 }
 

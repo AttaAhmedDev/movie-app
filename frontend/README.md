@@ -1,16 +1,80 @@
-# React + Vite
+# REEL — Movie App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React movie browser powered by [The Movie Database (TMDB)](https://www.themoviedb.org/). Browse popular films, search titles, save favorites, and open detailed movie pages with cast and trailers.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Popular movies** — home page loads trending/popular titles from TMDB
+- **Search** — find movies by title
+- **Favorites** — save/remove favorites (persisted in `localStorage`)
+- **Movie details** — overview, rating, runtime, genres, cast (horizontal scroll), and YouTube trailer
+- **Cinema UI** — dark theme with gold accents, skeleton loading states
 
-## React Compiler
+## Tech stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19 + Vite
+- React Router
+- React Icons
+- TMDB API
 
-## Expanding the ESLint configuration
+## Getting started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+App runs at `http://localhost:5173/`.
+
+### Other scripts
+
+| Command         | Description              |
+| --------------- | ------------------------ |
+| `npm run dev`   | Start development server |
+| `npm run build` | Production build         |
+| `npm run preview` | Preview production build |
+| `npm run lint`  | Run ESLint               |
+
+### TMDB API key
+
+Movie data comes from TMDB. Get a free API key at [themoviedb.org/settings/api](https://www.themoviedb.org/settings/api), then set it in `src/services/api.js`:
+
+```js
+const API_KEY = "your_tmdb_api_key";
+```
+
+## Routes
+
+| Path           | Page                          |
+| -------------- | ----------------------------- |
+| `/`            | Home — popular movies + search |
+| `/favorites`   | Saved favorites               |
+| `/movie/:id`   | Movie details                 |
+
+## Project structure
+
+```
+frontend/src/
+├── components/
+│   ├── MovieCard.jsx
+│   ├── NavBar.jsx
+│   └── movie-details/
+│       ├── MovieHero.jsx
+│       ├── MovieOverview.jsx
+│       ├── MovieCast.jsx
+│       └── MovieTrailer.jsx
+├── contexts/
+│   └── MovieContext.jsx      # favorites state + localStorage
+├── pages/
+│   ├── Home.jsx
+│   ├── Favorites.jsx
+│   └── MovieDetails.jsx
+├── services/
+│   └── api.js                # TMDB API helpers
+└── css/                      # page & component styles
+```
+
+## License
+
+Personal / learning project. Movie data and images © TMDB and respective owners.

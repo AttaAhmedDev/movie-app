@@ -67,6 +67,7 @@ function Home() {
 
       {loading ? (
         <div className="movies-grid movies-grid--loading" aria-busy="true" aria-label="Loading movies">
+          {/* for loading skeleton */}
           {Array.from({ length: 8 }, (_, i) => (
             <div className="movie-skeleton" key={i}>
               <div className="movie-skeleton__poster" />
@@ -76,6 +77,7 @@ function Home() {
           ))}
         </div>
       ) : (
+        // for show movies if not loading
         <div className="movies-grid">
           {movies.map((movie) => (
             <MovieCard movie={movie} key={movie.id} />
